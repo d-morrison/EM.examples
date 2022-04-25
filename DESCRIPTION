@@ -23,5 +23,6 @@ Suggests:
     pander,
     rmarkdown
 VignetteBuilder: knitr
-URL: https://d-morrison.github.io/EM.examples/, https://github.com/d-morrison/EM.examples
+URL: https://d-morrison.github.io/EM.examples/,
+    https://github.com/d-morrison/EM.examples
 BugReports: https://github.com/d-morrison/EM.examples/issues
