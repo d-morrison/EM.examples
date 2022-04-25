@@ -1,0 +1,107 @@
+---
+title: "McLachlan-p-17"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{McLachlan-p-17}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+```{r setup}
+library(EM.examples)
+library(ggplot2)
+library(dplyr)
+library(pander)
+```
+
+Example from McLachlan & Krishnan:
+
+```{r}
+rm(list = ls())
+n = 50
+mu = c(0,2)
+sigma = 1
+pi = c(.8,.2)
+set.seed(1)
+Z = rbinom(n = n, size = 1, p = pi[2]) |> factor(labels = c("Group 1", "Group 2"))
+W = rnorm(n = n, mean = ifelse(Z == "Group 1", mu[1], mu[2]), sd = sigma)
+hist(W, breaks = 10)
+data1 = tibble(Z, W)
+ggplot(data1, aes(x = W)) +
+  geom_histogram() +
+  facet_wrap(~Z, ncol = 1)
+
+MM = (mean(W) - mu[2])/(mu[1] - mu[2])
+```
+
+```{r,fig.height=6}
+
+`p(W=w|Z=1)` = dnorm(W, mu[1], sd = sigma)
+`p(W=w|Z=2)` = dnorm(W, mu[2], sd = sigma)
+
+likelihood = function(pi1)
+{
+  sapply(pi1, 
+    function(x)
+    {
+      (x * `p(W=w|Z=1)` + (1 - x) * `p(W=w|Z=2)`) |> prod()
+    })
+  
+}
+
+loglik = function(pi1) log(likelihood(pi1))
+
+par(mfrow = c(2,1))
+plot(likelihood, xlim = c(0,1), xlab = "pi_1")
+plot(loglik, xlim = c(0,1), xlab = "pi_1", ylab = "log(likelihood)")
+```
+
+# EM Algorithm
+
+```{r}
+
+`pi-hat`  = .5
+diff = Inf
+tolerance = .00001
+progress = tibble(
+  Iteration = 0,
+  `pi-hat` = `pi-hat`,
+  loglik =  loglik(`pi-hat`)
+)
+max_iterations = 1000
+for(i in 1:max_iterations)
+{
+  `p(W=w,Z=1)` = `p(W=w|Z=1)`*`pi-hat`
+  `p(W=w,Z=2)` = `p(W=w|Z=2)`*(1 - `pi-hat`)
+  `p(W=w)` = `p(W=w,Z=1)` + `p(W=w,Z=2)`
+  `p(Z=1|W=w)` = `p(W=w,Z=1)`/`p(W=w)`
+  `p(Z=2|W=w)` = `p(W=w,Z=2)`/`p(W=w)`
+  `pi-hat-prev` = `pi-hat`
+  `pi-hat` = mean(`p(Z=1|W=w)`)
+  diff = `pi-hat` - `pi-hat-prev`
+  new_results = tibble(
+    Iteration = i,
+    `pi-hat` = `pi-hat`,
+    loglik = loglik(`pi-hat`),
+    `diff(loglik)` = diff)
+  
+  progress = 
+    bind_rows(progress, new_results)
+    
+  if(diff < tolerance) break;  
+}
+
+pander(progress)
+
+
+```
+
+

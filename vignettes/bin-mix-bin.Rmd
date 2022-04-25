@@ -1,0 +1,31 @@
+---
+title: "bin-mix-bin"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{bin-mix-bin}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(EM.examples)
+```
+
+
+```{r}
+
+X = c(1,0,0)
+
+plot(function(p) likelihood_bin_mix(x = X, pi = p), xlim = c(.33,.34)); abline(v = 4*mean(X) - 1)
+plot(function(p) likelihood_bin_mix(x = X, pi = p), xlim = c(0,1)); abline(v = 4*mean(X) - 1)
+plot(function(p) likelihood_bin_mix(x = X, pi = p) |> log(), xlim = c(0,1)); abline(v = 4*mean(X) - 1)
+
+
+```
