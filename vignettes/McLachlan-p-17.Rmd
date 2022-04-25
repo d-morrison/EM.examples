@@ -35,11 +35,23 @@ Z = rbinom(n = n, size = 1, p = pi[2]) |> factor(labels = c("Group 1", "Group 2"
 W = rnorm(n = n, mean = ifelse(Z == "Group 1", mu[1], mu[2]), sd = sigma)
 hist(W, breaks = 10)
 data1 = tibble(Z, W)
+
+```
+
+Here's the observed data:
+
+```{r}
+ggplot(data1, aes(x = W)) +
+  geom_histogram()
+```
+
+And here's the (latent) complete data:
+
+```{r}
 ggplot(data1, aes(x = W)) +
   geom_histogram() +
   facet_wrap(~Z, ncol = 1)
 
-MM = (mean(W) - mu[2])/(mu[1] - mu[2])
 ```
 
 ```{r,fig.height=6}
