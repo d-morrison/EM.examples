@@ -19,6 +19,7 @@ RoxygenNote: 7.1.1
 Suggests: 
     ggplot2,
     knitr,
+    pander,
     rmarkdown
 VignetteBuilder: knitr
 URL: https://d-morrison.github.io/EM.examples/
