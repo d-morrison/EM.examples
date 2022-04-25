@@ -8,3 +8,4 @@ $run_dev.*
 ^docs$
 ^pkgdown$
 ^\.github$
+^LICENSE\.md$

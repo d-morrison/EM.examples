@@ -2,20 +2,22 @@ Package: EM.examples
 Title: Examples of EM Algorithms
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "firstname",
-           family = "lastname",
+    person(given = "Douglas Ezra",
+           family = "Morrison",
            role = c("aut", "cre"),
-           email = "your@email.com")
+           email = "demorrison@ucdavis.edu")
 Description: What the package does (one paragraph).
-License: What license is it under?
+License: MIT + file LICENSE
 Imports: 
     config (>= 0.3.1),
+    dplyr,
     golem (>= 0.3.2),
     shiny (>= 1.7.1)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
 Suggests: 
+    ggplot2,
     knitr,
     rmarkdown
 VignetteBuilder: knitr
