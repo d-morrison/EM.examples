@@ -4,8 +4,9 @@ Version: 0.0.0.9000
 Authors@R: 
     person(given = "Douglas Ezra",
            family = "Morrison",
-           role = c("aut", "cre"),
-           email = "demorrison@ucdavis.edu")
+           role = c("aut", "cre","cph"),
+           email = "demorrison@ucdavis.edu",
+           comment = c(ORCID = "0000-0002-7195-830X"))
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Imports: 
@@ -22,4 +23,5 @@ Suggests:
     pander,
     rmarkdown
 VignetteBuilder: knitr
-URL: https://d-morrison.github.io/EM.examples/
+URL: https://d-morrison.github.io/EM.examples/, https://github.com/d-morrison/EM.examples
+BugReports: https://github.com/d-morrison/EM.examples/issues
