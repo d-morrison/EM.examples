@@ -1,5 +1,5 @@
 Package: EM.examples
-Title: An Amazing Shiny App
+Title: Examples of EM Algorithms
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "firstname",
