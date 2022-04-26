@@ -63,15 +63,15 @@ ggplot(data1, aes(x = Y)) +
 
 ```{r,fig.height=6}
 
-`p(Y=y|Z=1)` = dnorm(Y, mu[1], sd = sigma)
-`p(Y=y|Z=2)` = dnorm(Y, mu[2], sd = sigma)
+`p(Y=y|Z=0)` = dnorm(Y, mu[1], sd = sigma)
+`p(Y=y|Z=1)` = dnorm(Y, mu[2], sd = sigma)
 
 likelihood = function(pi1)
 {
   sapply(pi1, 
     function(x)
     {
-      (x * `p(Y=y|Z=1)` + (1 - x) * `p(Y=y|Z=2)`) |> prod()
+      (x * `p(Y=y|Z=0)` + (1 - x) * `p(Y=y|Z=1)`) |> prod()
     })
   
 }
@@ -87,13 +87,13 @@ plot(loglik, xlim = c(0,1), xlab = "pi_1", ylab = "log(likelihood)")
 
 ```{r, fig.height = 6, fig.width = 6}
 
-`p(Z=1)`  = .5 # initial guess
+`p(Z=0)`  = .5 # initial guess
 diff = Inf
 tolerance = .00001
 progress = tibble(
   Iteration = 0,
-  `p(Z=1)` = `p(Z=1)`,
-  loglik =  loglik(`p(Z=1)`)
+  `p(Z=0)` = `p(Z=0)`,
+  loglik =  loglik(`p(Z=0)`)
 )
 max_iterations = 1000
 
@@ -103,21 +103,21 @@ plot(loglik, xlim = c(0,1), xlab = "p(Z=0)", ylab = "log(likelihood)", lwd = 2)
   
 for(i in 1:max_iterations)
 {
-  `p(Y=y,Z=1)` = `p(Y=y|Z=1)`*`p(Z=1)`
-  `p(Y=y,Z=2)` = `p(Y=y|Z=2)`*(1 - `p(Z=1)`)
-  `p(Y=y)` = `p(Y=y,Z=1)` + `p(Y=y,Z=2)`
+  `p(Y=y,Z=0)` = `p(Y=y|Z=0)`*`p(Z=0)`
+  `p(Y=y,Z=1)` = `p(Y=y|Z=1)`*(1 - `p(Z=0)`)
+  `p(Y=y)` = `p(Y=y,Z=0)` + `p(Y=y,Z=1)`
+  `p(Z=0|Y=y)` = `p(Y=y,Z=0)`/`p(Y=y)`
   `p(Z=1|Y=y)` = `p(Y=y,Z=1)`/`p(Y=y)`
-  `p(Z=2|Y=y)` = `p(Y=y,Z=2)`/`p(Y=y)`
-  `pi-hat-prev` = `p(Z=1)`
-  `p(Z=1)` = mean(`p(Z=1|Y=y)`)
+  `pi-hat-prev` = `p(Z=0)`
+  `p(Z=0)` = mean(`p(Z=0|Y=y)`)
   
   Q = function(pi1)
   {
     sapply(pi1, 
       FUN = function(x)
         {
-           sum((log(`p(Y=y|Z=1)`) + log(x))*`p(Z=1|Y=y)` +
-               (log(`p(Y=y|Z=2)`) + log(1-x))*`p(Z=2|Y=y)`)
+           sum((log(`p(Y=y|Z=0)`) + log(x))*`p(Z=0|Y=y)` +
+               (log(`p(Y=y|Z=1)`) + log(1-x))*`p(Z=1|Y=y)`)
         })
   }
   
@@ -127,16 +127,16 @@ for(i in 1:max_iterations)
   legend(x = "topleft", col = c('black', 'blue'), lty = 1, 
     lwd = 2,
     legend = c("log-likelihood", expression(Q(pi,hat(pi)))))
-  points(x = `p(Z=1)`, y = loglik(`p(Z=1)`), pch = 16, col = 'orange')
-  points(x = `p(Z=1)`, y = Q(`p(Z=1)`), col = "green", pch = 16)
+  points(x = `p(Z=0)`, y = loglik(`p(Z=0)`), pch = 16, col = 'orange')
+  points(x = `p(Z=0)`, y = Q(`p(Z=0)`), col = "green", pch = 16)
   
   
   
-  diff = `p(Z=1)` - `pi-hat-prev`
+  diff = `p(Z=0)` - `pi-hat-prev`
   new_results = tibble(
     Iteration = i,
-    `p(Z=1)` = `p(Z=1)`,
-    loglik = loglik(`p(Z=1)`),
+    `p(Z=0)` = `p(Z=0)`,
+    loglik = loglik(`p(Z=0)`),
     `diff(loglik)` = diff)
   
   progress = 
