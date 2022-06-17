@@ -67,7 +67,7 @@
 
 
 <script src="McLachlan-p-17_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>McLachlan-p-17</h1>
             
       
@@ -109,7 +109,7 @@
 <code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">data1</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">14</span><span class="op">)</span>,
-        axis.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">18</span>,face<span class="op">=</span><span class="st">"bold"</span><span class="op">)</span><span class="op">)</span>
+    axis.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">18</span>,face<span class="op">=</span><span class="st">"bold"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></code></pre></div>
 <p><img src="McLachlan-p-17_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 <p>And here’s the (latent) complete data:</p>
@@ -120,7 +120,7 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>
     strip.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">18</span><span class="op">)</span>,
     axis.text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">14</span><span class="op">)</span>,
-        axis.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">18</span>,face<span class="op">=</span><span class="st">"bold"</span><span class="op">)</span><span class="op">)</span>
+    axis.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">18</span>,face<span class="op">=</span><span class="st">"bold"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></code></pre></div>
 <p><img src="McLachlan-p-17_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -149,7 +149,7 @@
 </h2>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="va">`p(Z=0)`</span>  <span class="op">=</span> <span class="fl">.5</span> <span class="co"># initial guess</span>
+<span class="va">`p(Z=0)`</span>  <span class="op">=</span> <span class="fl">.5</span> <span class="co"># initial guess for `pi-hat`</span>
 <span class="va">diff</span> <span class="op">=</span> <span class="cn">Inf</span>
 <span class="va">tolerance</span> <span class="op">=</span> <span class="fl">.00001</span>
 <span class="va">progress</span> <span class="op">=</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>
@@ -160,27 +160,35 @@
 <span class="va">max_iterations</span> <span class="op">=</span> <span class="fl">1000</span>
 
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
-  
+
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">loglik</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>, xlab <span class="op">=</span> <span class="st">"p(Z=0)"</span>, ylab <span class="op">=</span> <span class="st">"log(likelihood)"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-  
+
 <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">max_iterations</span><span class="op">)</span>
 <span class="op">{</span>
-  <span class="va">`p(Y=y,Z=0)`</span> <span class="op">=</span> <span class="va">`p(Y=y|Z=0)`</span><span class="op">*</span><span class="va">`p(Z=0)`</span>
-  <span class="va">`p(Y=y,Z=1)`</span> <span class="op">=</span> <span class="va">`p(Y=y|Z=1)`</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">`p(Z=0)`</span><span class="op">)</span>
-  <span class="va">`p(Y=y)`</span> <span class="op">=</span> <span class="va">`p(Y=y,Z=0)`</span> <span class="op">+</span> <span class="va">`p(Y=y,Z=1)`</span>
-  <span class="va">`p(Z=0|Y=y)`</span> <span class="op">=</span> <span class="va">`p(Y=y,Z=0)`</span><span class="op">/</span><span class="va">`p(Y=y)`</span>
-  <span class="va">`p(Z=1|Y=y)`</span> <span class="op">=</span> <span class="va">`p(Y=y,Z=1)`</span><span class="op">/</span><span class="va">`p(Y=y)`</span>
-  <span class="va">`pi-hat-prev`</span> <span class="op">=</span> <span class="va">`p(Z=0)`</span>
-  <span class="va">`p(Z=0)`</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">`p(Z=0|Y=y)`</span><span class="op">)</span>
+  <span class="co"># E step:</span>
+  <span class="va">Estep</span> <span class="op">=</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>
+    <span class="va">Y</span>, <span class="co"># observed data</span>
+    <span class="va">`p(Y=y|Z=0)`</span>,
+    <span class="va">`p(Y=y|Z=1)`</span>,
+    `p(Y=y,Z=0)` <span class="op">=</span> <span class="va">`p(Y=y|Z=0)`</span><span class="op">*</span><span class="va">`p(Z=0)`</span>, <span class="co"># `p(Z=0)` = "pi-hat"</span>
+    `p(Y=y,Z=1)` <span class="op">=</span> <span class="va">`p(Y=y|Z=1)`</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">`p(Z=0)`</span><span class="op">)</span>,
+    `p(Y=y)` <span class="op">=</span> <span class="va">`p(Y=y,Z=0)`</span> <span class="op">+</span> <span class="va">`p(Y=y,Z=1)`</span>,
+    `p(Z=0|Y=y)` <span class="op">=</span> <span class="va">`p(Y=y,Z=0)`</span><span class="op">/</span><span class="va">`p(Y=y)`</span>,
+    `p(Z=1|Y=y)` <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">`p(Z=0|Y=y)`</span> <span class="co"># == `p(Y=y,Z=1)`/`p(Y=y)`)</span>
+  <span class="op">)</span>
+  
+  <span class="co"># M step</span>
+  <span class="va">`pi-hat-prev`</span> <span class="op">=</span> <span class="va">`p(Z=0)`</span> <span class="co"># save the previous pi-hat estimate so we can graph our progress</span>
+  <span class="va">`p(Z=0)`</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">Estep</span><span class="op">$</span><span class="va">`p(Z=0|Y=y)`</span><span class="op">)</span> <span class="co"># here's the new pi-hat estimate</span>
   
   <span class="va">Q</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">pi1</span><span class="op">)</span>
   <span class="op">{</span>
     <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">pi1</span>, 
       FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-        <span class="op">{</span>
-           <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">`p(Y=y|Z=0)`</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">*</span><span class="va">`p(Z=0|Y=y)`</span> <span class="op">+</span>
-               <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">`p(Y=y|Z=1)`</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">*</span><span class="va">`p(Z=1|Y=y)`</span><span class="op">)</span>
-        <span class="op">}</span><span class="op">)</span>
+      <span class="op">{</span>
+        <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">Estep</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">`p(Y=y|Z=0)`</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">*</span><span class="va">`p(Z=0|Y=y)`</span> <span class="op">+</span>
+            <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">`p(Y=y|Z=1)`</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">*</span><span class="va">`p(Z=1|Y=y)`</span><span class="op">)</span><span class="op">)</span>
+      <span class="op">}</span><span class="op">)</span>
   <span class="op">}</span>
   
   <span class="co"># plot(loglik, xlim = c(0,1), xlab = "p(Z=0)", ylab = "log(likelihood)", lwd = 2)</span>
@@ -203,7 +211,7 @@
   
   <span class="va">progress</span> <span class="op">=</span> 
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">progress</span>, <span class="va">new_results</span><span class="op">)</span>
-    
+  
   <span class="kw">if</span><span class="op">(</span><span class="va">diff</span> <span class="op">&lt;</span> <span class="va">tolerance</span><span class="op">)</span> <span class="kw">break</span>;  
 <span class="op">}</span></code></pre></div>
 <p><img src="McLachlan-p-17_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
@@ -347,7 +355,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
     </footer>

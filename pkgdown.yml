@@ -1,10 +1,10 @@
 pandoc: 2.7.3
-pkgdown: 2.0.3
+pkgdown: 2.0.4
 pkgdown_sha: ~
 articles:
   McLachlan-p-17: McLachlan-p-17.html
   bin-mix-bin: bin-mix-bin.html
-last_built: 2022-04-26T21:55Z
+last_built: 2022-06-17T22:54Z
 urls:
   reference: https://d-morrison.github.io/EM.examples/reference
   article: https://d-morrison.github.io/EM.examples/articles
