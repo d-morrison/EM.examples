@@ -1,6 +1,8 @@
 ---
 title: "McLachlan-p-17"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    code_folding: show
 vignette: >
   %\VignetteIndexEntry{McLachlan-p-17}
   %\VignetteEngine{knitr::rmarkdown}
@@ -44,7 +46,7 @@ Here's the observed data:
 ggplot(data1, aes(x = Y)) +
   geom_histogram() +
   theme(axis.text=element_text(size=14),
-        axis.title=element_text(size=18,face="bold"))
+    axis.title=element_text(size=18,face="bold"))
 
 ```
 
@@ -57,7 +59,7 @@ ggplot(data1, aes(x = Y)) +
   theme(
     strip.text.x = element_text(size = 18),
     axis.text=element_text(size=14),
-        axis.title=element_text(size=18,face="bold"))
+    axis.title=element_text(size=18,face="bold"))
 
 ```
 
@@ -87,7 +89,7 @@ plot(loglik, xlim = c(0,1), xlab = "pi_1", ylab = "log(likelihood)")
 
 ```{r, fig.height = 6, fig.width = 6}
 
-`p(Z=0)`  = .5 # initial guess
+`p(Z=0)`  = .5 # initial guess for `pi-hat`
 diff = Inf
 tolerance = .00001
 progress = tibble(
@@ -98,27 +100,35 @@ progress = tibble(
 max_iterations = 1000
 
 par(mfrow = c(1,1))
-  
+
 plot(loglik, xlim = c(0,1), xlab = "p(Z=0)", ylab = "log(likelihood)", lwd = 2)
-  
+
 for(i in 1:max_iterations)
 {
-  `p(Y=y,Z=0)` = `p(Y=y|Z=0)`*`p(Z=0)`
-  `p(Y=y,Z=1)` = `p(Y=y|Z=1)`*(1 - `p(Z=0)`)
-  `p(Y=y)` = `p(Y=y,Z=0)` + `p(Y=y,Z=1)`
-  `p(Z=0|Y=y)` = `p(Y=y,Z=0)`/`p(Y=y)`
-  `p(Z=1|Y=y)` = `p(Y=y,Z=1)`/`p(Y=y)`
-  `pi-hat-prev` = `p(Z=0)`
-  `p(Z=0)` = mean(`p(Z=0|Y=y)`)
+  # E step:
+  Estep = tibble(
+    Y, # observed data
+    `p(Y=y|Z=0)`,
+    `p(Y=y|Z=1)`,
+    `p(Y=y,Z=0)` = `p(Y=y|Z=0)`*`p(Z=0)`, # `p(Z=0)` = "pi-hat"
+    `p(Y=y,Z=1)` = `p(Y=y|Z=1)`*(1 - `p(Z=0)`),
+    `p(Y=y)` = `p(Y=y,Z=0)` + `p(Y=y,Z=1)`,
+    `p(Z=0|Y=y)` = `p(Y=y,Z=0)`/`p(Y=y)`,
+    `p(Z=1|Y=y)` = 1 - `p(Z=0|Y=y)` # == `p(Y=y,Z=1)`/`p(Y=y)`)
+  )
+  
+  # M step
+  `pi-hat-prev` = `p(Z=0)` # save the previous pi-hat estimate so we can graph our progress
+  `p(Z=0)` = mean(Estep$`p(Z=0|Y=y)`) # here's the new pi-hat estimate
   
   Q = function(pi1)
   {
     sapply(pi1, 
       FUN = function(x)
-        {
-           sum((log(`p(Y=y|Z=0)`) + log(x))*`p(Z=0|Y=y)` +
-               (log(`p(Y=y|Z=1)`) + log(1-x))*`p(Z=1|Y=y)`)
-        })
+      {
+        with(Estep, sum((log(`p(Y=y|Z=0)`) + log(x))*`p(Z=0|Y=y)` +
+            (log(`p(Y=y|Z=1)`) + log(1-x))*`p(Z=1|Y=y)`))
+      })
   }
   
   # plot(loglik, xlim = c(0,1), xlab = "p(Z=0)", ylab = "log(likelihood)", lwd = 2)
@@ -141,7 +151,7 @@ for(i in 1:max_iterations)
   
   progress = 
     bind_rows(progress, new_results)
-    
+  
   if(diff < tolerance) break;  
 }
 
