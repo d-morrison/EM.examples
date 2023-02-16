@@ -64,15 +64,17 @@ fit_model = function(
     `p(Z=1)` = 0.5, # initial guess for `pi-hat`
     tolerance = 0.00001,
     max_iterations = 1000,
-    progress = tibble(
+    verbose = FALSE
+)
+{
+  
+  # pre-allocate a table of results by iteration:
+  progress = tibble(
       Iteration = 0:max_iterations,
       `p(Z=1)` = NA_real_,
       loglik =  NA_real_,
       diff_loglik = NA_real_
-    ),
-    verbose = FALSE
-)
-{
+    )
   
   # initial E step, to perform needed calculations for initial likelihood:
   data = data |> E_step(`p(Z=1)` = `p(Z=1)`) 
