@@ -195,15 +195,17 @@ parameter pi-hat and the log-likelihood for each iteration.</p>
 <span>    <span class="va">`p(Z=1)`</span> <span class="op">=</span> <span class="fl">0.5</span>, <span class="co"># initial guess for `pi-hat`</span></span>
 <span>    <span class="va">tolerance</span> <span class="op">=</span> <span class="fl">0.00001</span>,</span>
 <span>    <span class="va">max_iterations</span> <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>    <span class="va">progress</span> <span class="op">=</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>    <span class="va">verbose</span> <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="co"># pre-allocate a table of results by iteration:</span></span>
+<span>  <span class="va">progress</span> <span class="op">=</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
 <span>      Iteration <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="va">max_iterations</span>,</span>
 <span>      `p(Z=1)` <span class="op">=</span> <span class="cn">NA_real_</span>,</span>
 <span>      loglik <span class="op">=</span>  <span class="cn">NA_real_</span>,</span>
 <span>      diff_loglik <span class="op">=</span> <span class="cn">NA_real_</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    <span class="va">verbose</span> <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span>
-<span><span class="op">{</span></span>
+<span>    <span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="co"># initial E step, to perform needed calculations for initial likelihood:</span></span>
 <span>  <span class="va">data</span> <span class="op">=</span> <span class="va">data</span> <span class="op">|&gt;</span> <span class="fu">E_step</span><span class="op">(</span>`p(Z=1)` <span class="op">=</span> <span class="va">`p(Z=1)`</span><span class="op">)</span> </span>
@@ -269,7 +271,7 @@ the time it takes to run the <code>fit_model()</code> function:</p>
 <code class="sourceCode R"><span><span class="op">{</span><span class="va">results</span> <span class="op">=</span> <span class="fu">fit_model</span><span class="op">(</span><span class="va">data</span>, tolerance <span class="op">=</span> <span class="fl">0.00001</span><span class="op">)</span><span class="op">}</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.779   0.028   0.807</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.942   0.040   0.983</span></span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">results</span>, n <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 19 × 4</span></span></span>
