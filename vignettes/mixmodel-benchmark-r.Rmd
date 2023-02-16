@@ -1,0 +1,148 @@
+---
+title: "mixmodel-benchmark-r"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{mixmodel-benchmark-r}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This R code defines an Expectation-Maximization (EM) algorithm to estimate the parameters of a mixture of two Gaussian distributions. The EM algorithm is an iterative method for finding the maximum likelihood estimates of parameters in models with latent (unobserved) variables. The Gaussian mixture model in this code assumes that the observed data, Y, is generated from either one of two Gaussian distributions with means mu[1] and mu[2] and a common standard deviation sigma. The probability of the data coming from the first Gaussian distribution is pi, while the probability of the data coming from the second Gaussian distribution is 1 - pi.
+
+The gen_data function generates data according to this Gaussian mixture model, while the fit_model function performs the EM algorithm. The E_step function calculates the expected value of the log-likelihood given the current estimates of the parameters and the observed data, while the M_step updates the estimates of the parameters based on the expected log-likelihood. The algorithm continues to iterate until the difference in the log-likelihood between consecutive iterations is less than a specified tolerance (tolerance). The results of the algorithm are saved in a progress tibble that shows the values of the estimated parameter pi-hat and the log-likelihood for each iteration.
+
+Finally, the system.time function is used to measure the time it takes to run the fit_model function.
+
+```{r setup}
+
+library(dplyr)
+
+rm(list = ls())
+
+gen_data = function(
+    n = 500000,
+    mu = c(0,2),
+    sigma = 1,
+    pi = .8)
+{
+  
+  tibble(
+    Obs.ID = 1:n,
+    Z = (runif(n) > pi) + 1,
+    Y = rnorm(n = n, mean = mu[Z], sd = sigma)
+  ) |>
+    select(-Z) |>
+    mutate(
+      `p(Y=y|Z=1)` = dnorm(Y, mu[1], sd = sigma),
+      `p(Y=y|Z=2)` = dnorm(Y, mu[2], sd = sigma),
+    )
+  
+}
+
+set.seed(1)
+
+`p(Y|Z)` = gen_data()
+
+`p(Y|Z)`
+```
+
+```{r}
+
+fit_model = function(
+    `p(Y|Z)`,
+    `p(Z=1)`  = .5, # initial guess for `pi-hat`
+    tolerance = .00001,
+    max_iterations = 1000)
+{
+  
+  loglik = function(`p(Z=1)`, `p(Y|Z)`)
+  {
+    
+    `p(Y|Z)` |>
+      E_step(`p(Z=1)` = `p(Z=1)`) |>
+      pull(`p(Y=y)`) |>
+      log() |>
+      sum()
+    
+  }
+  
+  # EM Algorithm
+  
+  progress = tibble(
+    Iteration = 0:max_iterations,
+    `p(Z=1)` = NA,
+    loglik =  NA
+  )
+  
+  ll = loglik(`p(Z=1)`, `p(Y|Z)`)
+  progress[1, c("p(Z=1)", "loglik")] = list(`p(Z=1)`, ll)
+  
+  for(i in 1:max_iterations)
+  {
+    # E step:
+    `p(Y|Z)` = `p(Y|Z)` |> E_step(`p(Z=1)` = `p(Z=1)`)
+    
+    # M step
+    
+    ## save the previous pi-hat estimate so we can graph our progress:
+    `pi-hat-old` = `p(Z=1)`
+    
+    ## save the previous log-likelihood so we can test for convergence
+    ll_old = ll
+    
+    ## here's the new pi-hat estimate:
+    `p(Z=1)` = `p(Y|Z)` |> M_step()
+    
+    ## here's the new log-likelihood
+    ll = loglik(`p(Z=1)`, `p(Y|Z)`)
+    
+    diff = ll - ll_old
+    
+    new_results = tibble(
+      Iteration = i,
+      `p(Z=1)` = `p(Z=1)`,
+      loglik = loglik(`p(Z=1)`, `p(Y|Z)`),
+      `diff(loglik)` = diff)
+    
+    progress[i+1, c("p(Z=1)", "loglik")] = list(`p(Z=1)`, ll)
+    
+    # print(new_results)
+    if(diff < tolerance) break;
+  }
+  
+  return(progress[1:(i+1), ])
+}
+
+
+E_step = function(`p(Y|Z)`, `p(Z=1)`)
+{
+  `p(Y|Z)` |>
+    mutate(
+      `p(Y=y, Z=1)` = `p(Y=y|Z=1)` * `p(Z=1)`,
+      `p(Y=y, Z=2)` = `p(Y=y|Z=2)` * (1 - `p(Z=1)`),
+      `p(Y=y)`      = `p(Y=y, Z=1)` + `p(Y=y, Z=2)`,
+      `p(Z=1|Y=y)`  = `p(Y=y, Z=1)` / `p(Y=y)`,
+    )
+}
+
+M_step = function(`p(Y|Z)`)
+{
+  `p(Y|Z)` |> pull(`p(Z=1|Y=y)`) |> mean()
+}
+
+```
+
+Here, we test the speed:
+
+```{r}
+system.time(fit_model(`p(Y|Z)`, tolerance = .00001))
+
+
+```
