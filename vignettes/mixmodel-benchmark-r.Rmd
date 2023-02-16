@@ -55,31 +55,19 @@ set.seed(1)
 
 ```{r}
 
+
 fit_model = function(
     `p(Y|Z)`,
     `p(Z=1)`  = .5, # initial guess for `pi-hat`
     tolerance = .00001,
-    max_iterations = 1000)
+    max_iterations = 1000,
+    progress = tibble(
+      Iteration = 0:max_iterations,
+      `p(Z=1)` = NA,
+      loglik =  NA
+    )
+)
 {
-  
-  loglik = function(`p(Z=1)`, `p(Y|Z)`)
-  {
-    
-    `p(Y|Z)` |>
-      E_step(`p(Z=1)` = `p(Z=1)`) |>
-      pull(`p(Y=y)`) |>
-      log() |>
-      sum()
-    
-  }
-  
-  # EM Algorithm
-  
-  progress = tibble(
-    Iteration = 0:max_iterations,
-    `p(Z=1)` = NA,
-    loglik =  NA
-  )
   
   ll = loglik(`p(Z=1)`, `p(Y|Z)`)
   progress[1, c("p(Z=1)", "loglik")] = list(`p(Z=1)`, ll)
@@ -135,6 +123,17 @@ E_step = function(`p(Y|Z)`, `p(Z=1)`)
 M_step = function(`p(Y|Z)`)
 {
   `p(Y|Z)` |> pull(`p(Z=1|Y=y)`) |> mean()
+}
+
+loglik = function(`p(Z=1)`, `p(Y|Z)`)
+{
+  
+  `p(Y|Z)` |>
+    E_step(`p(Z=1)` = `p(Z=1)`) |>
+    pull(`p(Y=y)`) |>
+    log() |>
+    sum()
+  
 }
 
 ```
