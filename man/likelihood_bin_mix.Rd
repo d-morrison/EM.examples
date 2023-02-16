@@ -9,9 +9,6 @@ likelihood_bin_mix(x, pi, `p(X=1|Z=0)` = 1/2, `p(X=1|Z=1)` = 1/4)
 \arguments{
 \item{pi}{}
 }
-\value{
-
-}
 \description{
 Title
 }
