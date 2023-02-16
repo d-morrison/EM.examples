@@ -12,13 +12,12 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
 ```
 
 This R code defines an Expectation-Maximization (EM) algorithm to estimate the parameters of a mixture of two Gaussian distributions. The EM algorithm is an iterative method for finding the maximum likelihood estimates of parameters in models with latent (unobserved) variables. The Gaussian mixture model in this code assumes that the observed data, Y, is generated from either one of two Gaussian distributions with means mu[1] and mu[2] and a common standard deviation sigma. The probability of the data coming from the first Gaussian distribution is pi, while the probability of the data coming from the second Gaussian distribution is 1 - pi.
 
 The gen_data function generates data according to this Gaussian mixture model, while the fit_model function performs the EM algorithm. The E_step function calculates the expected value of the log-likelihood given the current estimates of the parameters and the observed data, while the M_step updates the estimates of the parameters based on the expected log-likelihood. The algorithm continues to iterate until the difference in the log-likelihood between consecutive iterations is less than a specified tolerance (tolerance). The results of the algorithm are saved in a progress tibble that shows the values of the estimated parameter pi-hat and the log-likelihood for each iteration.
-
-Finally, the system.time function is used to measure the time it takes to run the fit_model function.
 
 ```{r setup}
 
@@ -64,7 +63,8 @@ fit_model = function(
     progress = tibble(
       Iteration = 0:max_iterations,
       `p(Z=1)` = NA,
-      loglik =  NA
+      loglik =  NA,
+      diff_loglik = NA
     )
 )
 {
@@ -99,7 +99,7 @@ fit_model = function(
       loglik = loglik(`p(Z=1)`, `p(Y|Z)`),
       `diff(loglik)` = diff)
     
-    progress[i+1, c("p(Z=1)", "loglik")] = list(`p(Z=1)`, ll)
+    progress[i+1, c("p(Z=1)", "loglik", "diff_loglik")] = list(`p(Z=1)`, ll, diff)
     
     # print(new_results)
     if(diff < tolerance) break;
@@ -138,10 +138,15 @@ loglik = function(`p(Z=1)`, `p(Y|Z)`)
 
 ```
 
-Here, we test the speed:
+Finally, the `system.time()` function is used to measure the time it takes to run the `fit_model()` function:
 
 ```{r}
-system.time(fit_model(`p(Y|Z)`, tolerance = .00001))
-
+{results = fit_model(`p(Y|Z)`, tolerance = .00001)} |> 
+  system.time()
 
 ```
+
+```{r}
+print(results, n = Inf)
+```
+
