@@ -110,9 +110,9 @@ parameter pi-hat and the log-likelihood for each iteration.</p>
 <span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html" class="external-link">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rapporter.github.io/pander/" class="external-link">pander</a></span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="va">gen_data</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span></span>
 <span>    <span class="va">n</span> <span class="op">=</span> <span class="fl">500000</span>,</span>
 <span>    <span class="va">mu</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">2</span><span class="op">)</span>,</span>
@@ -131,30 +131,66 @@ parameter pi-hat and the log-likelihood for each iteration.</p>
 <span>      `p(Y=y|Z=2)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">dnorm</a></span><span class="op">(</span><span class="va">Y</span>, <span class="va">mu</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, sd <span class="op">=</span> <span class="va">sigma</span><span class="op">)</span>,</span>
 <span>    <span class="op">)</span></span>
 <span>  </span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">`p(Y|Z)`</span> <span class="op">=</span> <span class="fu">gen_data</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">`p(Y|Z)`</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 500,000 × 4</span></span></span>
-<span><span class="co">#&gt;    Obs.ID       Y `p(Y=y|Z=1)` `p(Y=y|Z=2)`</span></span>
-<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>      1  0.241       0.387         0.085<span style="text-decoration: underline;">0</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>      2 -<span style="color: #BB0000;">0.407</span>       0.367         0.022<span style="text-decoration: underline;">0</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>      3  0.013<span style="text-decoration: underline;">1</span>      0.399         0.055<span style="text-decoration: underline;">4</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>      4  2.76        0.008<span style="text-decoration: underline;">95</span>       0.300 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>      5 -<span style="color: #BB0000;">0.460</span>       0.359         0.019<span style="text-decoration: underline;">4</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>      6  1.50        0.129         0.353 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>      7  2.19        0.036<span style="text-decoration: underline;">3</span>        0.392 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>      8  0.623       0.329         0.155 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>      9 -<span style="color: #BB0000;">0.443</span>       0.362         0.020<span style="text-decoration: underline;">2</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>     10  0.558       0.341         0.141 </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 499,990 more rows</span></span></span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<span><span class="va">`p(Y|Z)`</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/pander/man/pander.html" class="external-link">pander</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<table style="width:62%;" class="table">
+<colgroup>
+<col width="12%">
+<col width="13%">
+<col width="18%">
+<col width="18%">
+</colgroup>
+<thead><tr class="header">
+<th align="center">Obs.ID</th>
+<th align="center">Y</th>
+<th align="center">p(Y=y|Z=1)</th>
+<th align="center">p(Y=y|Z=2)</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center">0.2415</td>
+<td align="center">0.3875</td>
+<td align="center">0.08499</td>
+</tr>
+<tr class="even">
+<td align="center">2</td>
+<td align="center">-0.4071</td>
+<td align="center">0.3672</td>
+<td align="center">0.02202</td>
+</tr>
+<tr class="odd">
+<td align="center">3</td>
+<td align="center">0.01312</td>
+<td align="center">0.3989</td>
+<td align="center">0.05542</td>
+</tr>
+<tr class="even">
+<td align="center">4</td>
+<td align="center">2.756</td>
+<td align="center">0.008952</td>
+<td align="center">0.2999</td>
+</tr>
+<tr class="odd">
+<td align="center">5</td>
+<td align="center">-0.4597</td>
+<td align="center">0.3589</td>
+<td align="center">0.01937</td>
+</tr>
+<tr class="even">
+<td align="center">6</td>
+<td align="center">1.505</td>
+<td align="center">0.1286</td>
+<td align="center">0.3529</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span></span>
 <span><span class="va">fit_model</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span></span>
 <span>    <span class="va">`p(Y|Z)`</span>,</span>
 <span>    <span class="va">`p(Z=1)`</span>  <span class="op">=</span> <span class="fl">.5</span>, <span class="co"># initial guess for `pi-hat`</span></span>
@@ -237,12 +273,12 @@ parameter pi-hat and the log-likelihood for each iteration.</p>
 <span><span class="op">}</span></span></code></pre></div>
 <p>Finally, the <code><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time()</a></code> function is used to measure
 the time it takes to run the <code>fit_model()</code> function:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">{</span><span class="va">results</span> <span class="op">=</span> <span class="fu">fit_model</span><span class="op">(</span><span class="va">`p(Y|Z)`</span>, tolerance <span class="op">=</span> <span class="fl">.00001</span><span class="op">)</span><span class="op">}</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   1.802   0.051   1.855</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<span><span class="co">#&gt;   2.275   0.048   2.324</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">results</span>, n <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 19 × 4</span></span></span>
 <span><span class="co">#&gt;    Iteration `p(Z=1)`   loglik diff_loglik</span></span>
