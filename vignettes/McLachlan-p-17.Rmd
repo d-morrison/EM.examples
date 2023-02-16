@@ -155,7 +155,7 @@ for(i in 1:max_iterations)
   
   
   
-  diff = `p(Z=0)` - `pi-hat-prev`
+  diff = `p(Z=0)` - `pi-hat-prev` # this is wrong; should be diff of logliks
   new_results = tibble(
     Iteration = i,
     `p(Z=0)` = `p(Z=0)`,
