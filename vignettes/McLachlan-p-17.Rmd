@@ -40,6 +40,19 @@ data1 = tibble(Z, Y)
 
 ```
 
+```{julia}
+n = 50
+mu = [0, 2]
+sigma = 1
+pi = [0.8, 0.2]
+Random.seed!(1)
+Z = rand(Bernoulli(pi[2]), n)
+Z = map(x -> x ? "Z = 1" : "Z = 0", Z)
+Y = randn(n) .* sigma .+ map(x -> x == "Z = 0" ? mu[1] : mu[2], Z)
+hist(Y, bins=10)
+data1 = DataFrame(Z = Z, Y = Y)
+```
+
 Here's the observed data:
 
 ```{r}
