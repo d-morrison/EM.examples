@@ -33,7 +33,7 @@ gen_data = function(
     n = 500000,
     mu = c(0,2),
     sigma = 1,
-    pi = .8)
+    pi = 0.8)
 {
   
   tibble(
@@ -62,8 +62,8 @@ set.seed(1)
 
 fit_model = function(
     `p(Y|Z)`,
-    `p(Z=1)`  = .5, # initial guess for `pi-hat`
-    tolerance = .00001,
+    `p(Z=1)`  = 0.5, # initial guess for `pi-hat`
+    tolerance = 0.00001,
     max_iterations = 1000,
     progress = tibble(
       Iteration = 0:max_iterations,
