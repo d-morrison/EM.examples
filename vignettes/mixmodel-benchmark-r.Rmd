@@ -139,9 +139,7 @@ M_step = function(data)
 
 loglik = function(data)
 {
-  
   data |> pull(`p(Y=y)`) |> log() |> sum()
-  
 }
 
 ```
