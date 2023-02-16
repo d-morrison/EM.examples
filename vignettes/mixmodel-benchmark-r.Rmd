@@ -24,8 +24,10 @@ The gen_data function generates data according to this Gaussian mixture model, w
 ```{r setup}
 
 library(dplyr)
+library(pander)
+```
 
-rm(list = ls())
+```{r define gen data}
 
 gen_data = function(
     n = 500000,
@@ -47,15 +49,16 @@ gen_data = function(
   
 }
 
-set.seed(1)
-
-`p(Y|Z)` = gen_data()
-
-`p(Y|Z)`
 ```
 
 ```{r}
+set.seed(1)
+`p(Y|Z)` = gen_data()
 
+`p(Y|Z)` |> head(6) |> pander()
+```
+
+```{r}
 
 fit_model = function(
     `p(Y|Z)`,
