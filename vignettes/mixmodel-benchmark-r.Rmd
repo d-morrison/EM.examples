@@ -1,6 +1,8 @@
 ---
 title: "mixmodel-benchmark-r"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    code_folding: show
 vignette: >
   %\VignetteIndexEntry{mixmodel-benchmark-r}
   %\VignetteEngine{knitr::rmarkdown}
