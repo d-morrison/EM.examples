@@ -134,8 +134,7 @@ parameter pi-hat and the log-likelihood for each iteration.</p>
 <span><span class="op">}</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">data</span> <span class="op">=</span> <span class="fu">gen_data</span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
+<span><span class="va">data</span> <span class="op">=</span> <span class="fu">gen_data</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">500000</span>, pi <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/pander/man/pander.html" class="external-link">pander</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table style="width:62%;" class="table">
 <colgroup>
@@ -198,9 +197,9 @@ parameter pi-hat and the log-likelihood for each iteration.</p>
 <span>    <span class="va">max_iterations</span> <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>    <span class="va">progress</span> <span class="op">=</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
 <span>      Iteration <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="va">max_iterations</span>,</span>
-<span>      `p(Z=1)` <span class="op">=</span> <span class="cn">NA</span>,</span>
-<span>      loglik <span class="op">=</span>  <span class="cn">NA</span>,</span>
-<span>      diff_loglik <span class="op">=</span> <span class="cn">NA</span></span>
+<span>      `p(Z=1)` <span class="op">=</span> <span class="cn">NA_real_</span>,</span>
+<span>      loglik <span class="op">=</span>  <span class="cn">NA_real_</span>,</span>
+<span>      diff_loglik <span class="op">=</span> <span class="cn">NA_real_</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    <span class="va">verbose</span> <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
@@ -261,19 +260,16 @@ parameter pi-hat and the log-likelihood for each iteration.</p>
 <span><span class="va">loglik</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  </span>
-<span>  <span class="va">data</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">`p(Y=y)`</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="va">data</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">`p(Y=y)`</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  </span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>Finally, the <code><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time()</a></code> function is used to measure
 the time it takes to run the <code>fit_model()</code> function:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">{</span><span class="va">results</span> <span class="op">=</span> <span class="fu">fit_model</span><span class="op">(</span><span class="va">data</span>, tolerance <span class="op">=</span> <span class="fl">.00001</span><span class="op">)</span><span class="op">}</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="op">{</span><span class="va">results</span> <span class="op">=</span> <span class="fu">fit_model</span><span class="op">(</span><span class="va">data</span>, tolerance <span class="op">=</span> <span class="fl">0.00001</span><span class="op">)</span><span class="op">}</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   1.012   0.027   1.040</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.779   0.028   0.807</span></span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">results</span>, n <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 19 × 4</span></span></span>
