@@ -14,18 +14,26 @@ function gen_data(;n = 500000, mu = [0, 2], sigma = 1, pZ1 = 0.8)
     return data
   end
 
-function fit_model!(
+  function fit_model!(
     data; 
     pi_hat_0 = 0.5, 
-    tolerance = 0.001,
+    tolerance = 0.0001,
     max_iterations = 1000,
-    progress = DataFrame(iter = 1:(max_iterations+1), pi_hat = undef, ll = undef, ll_diff = undef))
+    progress = DataFrame(
+        iter = 1:(max_iterations+1), 
+        pi_hat = Vector{Float64}(undef, max_iterations+1), 
+        ll = Vector{Float64}(undef, max_iterations+1), 
+        ll_diff = Vector{Float64}(undef, max_iterations+1)
+        )
+    )
 
     pi_hat = pi_hat_0
     E_step!(data, pi_hat)
     ll = loglik!(data)
-    progress[1,:] = (iter = 0, pi_hat, ll, ll_diff = NaN)
+    # progress = [(iter = 0, pi_hat, ll, ll_diff = NaN)]
+    progress[1,:] = (0, pi_hat, ll, NaN)
     
+    last_iter = 0
     for i in 1:max_iterations
         pi_hat = M_step(data)
         E_step!(data, pi_hat)
@@ -33,13 +41,14 @@ function fit_model!(
         ll_old = ll
         ll = loglik!(data)
         ll_diff = ll - ll_old
-        push!(progress, (i, pi_hat, ll, ll_diff))
-        println(i=i, pi_hat = pi_hat, ll =ll, ll_diff = ll_diff)
+        progress[i+1,:] = (i, pi_hat, ll, ll_diff)
+
         if ll_diff < tolerance
+            last_iter = i
             break
         end
     end
-    return (pi, progress)
+    return progress[1:last_iter, :]
 end
 
 function E_step!(data, pi_hat)
