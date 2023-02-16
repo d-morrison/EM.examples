@@ -94,7 +94,7 @@ fit_model = function(
     ll_old = ll
     
     ## here's the new log-likelihood
-    ll = loglik(`p(Z=1)`, data)
+    ll = loglik(data)
     
     ll_diff = ll - ll_old
     
@@ -135,11 +135,11 @@ M_step = function(data)
 ```
 
 ```{r}
-loglik = function(`p(Z=1)`, data)
+
+loglik = function(data)
 {
   
   data |>
-    E_step(`p(Z=1)` = `p(Z=1)`) |>
     pull(`p(Y=y)`) |>
     log() |>
     sum()
