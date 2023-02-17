@@ -111,6 +111,9 @@ parameter pi-hat and the log-likelihood for each iteration.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rapporter.github.io/pander/" class="external-link">pander</a></span><span class="op">)</span></span></code></pre></div>
+<div class="section level2">
+<h2 id="generate-data">Generate data<a class="anchor" aria-label="anchor" href="#generate-data"></a>
+</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">gen_data</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span></span>
@@ -188,6 +191,10 @@ parameter pi-hat and the log-likelihood for each iteration.</p>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="section level2">
+<h2 id="fit-model">Fit model<a class="anchor" aria-label="anchor" href="#fit-model"></a>
+</h2>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">fit_model</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span></span>
@@ -239,6 +246,9 @@ parameter pi-hat and the log-likelihood for each iteration.</p>
 <span>  </span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">progress</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="va">i</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="e-step">E step<a class="anchor" aria-label="anchor" href="#e-step"></a>
+</h4>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">E_step</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">`p(Z=1)`</span><span class="op">)</span></span>
@@ -251,25 +261,40 @@ parameter pi-hat and the log-likelihood for each iteration.</p>
 <span>      `p(Z=1|Y=y)`  <span class="op">=</span> <span class="va">`p(Y=y, Z=1)`</span> <span class="op">/</span> <span class="va">`p(Y=y)`</span>,</span>
 <span>    <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="m-step">M step<a class="anchor" aria-label="anchor" href="#m-step"></a>
+</h4>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">M_step</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="va">data</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">`p(Z=1|Y=y)`</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="log-likelihood">Log-likelihood<a class="anchor" aria-label="anchor" href="#log-likelihood"></a>
+</h4>
+<p>Compute the log-likelihood of the observed data given current
+parameter estimates:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">loglik</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="va">data</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">`p(Y=y)`</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="results">Results<a class="anchor" aria-label="anchor" href="#results"></a>
+</h2>
 <p>Finally, the <code><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time()</a></code> function is used to measure
 the time it takes to run the <code>fit_model()</code> function:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">{</span><span class="va">results</span> <span class="op">=</span> <span class="fu">fit_model</span><span class="op">(</span><span class="va">data</span>, tolerance <span class="op">=</span> <span class="fl">0.00001</span><span class="op">)</span><span class="op">}</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.989   0.036   1.026</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.885   0.056   0.941</span></span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">results</span>, n <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 19 × 4</span></span></span>
@@ -294,7 +319,9 @@ the time it takes to run the <code>fit_model()</code> function:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span>        16    0.801 -<span style="color: #BB0000; text-decoration: underline;">825</span><span style="color: #BB0000;">284.</span>     4.56<span style="color: #949494;">e</span><span style="color: #BB0000;">-5</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span>        17    0.801 -<span style="color: #BB0000; text-decoration: underline;">825</span><span style="color: #BB0000;">284.</span>     1.19<span style="color: #949494;">e</span><span style="color: #BB0000;">-5</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">19</span>        18    0.801 -<span style="color: #BB0000; text-decoration: underline;">825</span><span style="color: #BB0000;">284.</span>     3.09<span style="color: #949494;">e</span><span style="color: #BB0000;">-6</span></span></span></code></pre></div>
-  </main>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
