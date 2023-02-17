@@ -3,6 +3,8 @@ title: "mixmodel-benchmark-r"
 output: 
   rmarkdown::html_vignette:
     code_folding: show
+    toc: true
+    toc_depth: 3
 vignette: >
   %\VignetteIndexEntry{mixmodel-benchmark-r}
   %\VignetteEngine{knitr::rmarkdown}
@@ -26,6 +28,8 @@ The gen_data function generates data according to this Gaussian mixture model, w
 library(dplyr)
 library(pander)
 ```
+
+# Generate data
 
 ```{r define gen data}
 
@@ -56,6 +60,8 @@ set.seed(1)
 data = gen_data(n = 500000, pi = 0.8)
 data |> head(6) |> pander()
 ```
+
+# Fit model
 
 ```{r}
 
@@ -111,6 +117,8 @@ fit_model = function(
 
 ```
 
+### E step
+
 ```{r}
 
 E_step = function(data, `p(Z=1)`)
@@ -126,6 +134,8 @@ E_step = function(data, `p(Z=1)`)
 
 ```
 
+### M step
+
 ```{r}
 
 M_step = function(data)
@@ -135,6 +145,10 @@ M_step = function(data)
 
 ```
 
+### Log-likelihood
+
+Compute the log-likelihood of the observed data given current parameter estimates:
+
 ```{r}
 
 loglik = function(data)
@@ -143,6 +157,8 @@ loglik = function(data)
 }
 
 ```
+
+# Results
 
 Finally, the `system.time()` function is used to measure the time it takes to run the `fit_model()` function:
 
