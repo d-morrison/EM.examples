@@ -110,22 +110,20 @@ p(Y=y|X=2)$.</p>
 <p>We want to estimate five parameters:</p>
 <ul>
 <li>
-<span class="math inline">\(\mu_1 \eqdef \text{E}[Y|X=1]\)</span>:
-the average weight of birds in flock 1</li>
+<span class="math inline">\(\mu_1 := \text{E}[Y|X=1]\)</span>: the
+average weight of birds in flock 1</li>
 <li>
-<span class="math inline">\(\sigma_1 \eqdef
-\text{SD}(Y|X=1)\)</span>: the standard deviation of weights among birds
-in flock 1</li>
+<span class="math inline">\(\sigma_1 := \text{SD}(Y|X=1)\)</span>:
+the standard deviation of weights among birds in flock 1</li>
 <li>
-<span class="math inline">\(\mu_2 \eqdef \text{E}[Y|X=2]\)</span>:
-the average weight of birds in flock 2</li>
+<span class="math inline">\(\mu_2 := \text{E}[Y|X=2]\)</span>: the
+average weight of birds in flock 2</li>
 <li>
-<span class="math inline">\(\sigma_2 \eqdef
-\text{SD}(Y|X=2)\)</span>: the standard deviation of weights among birds
-in flock 2</li>
+<span class="math inline">\(\sigma_2 := \text{SD}(Y|X=2)\)</span>:
+the standard deviation of weights among birds in flock 2</li>
 <li>
-<span class="math inline">\(\pi_1 \eqdef P(X=1)\)</span>: the
-proportion of caught birds that belong to flock 1<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;&lt;span class="math inline"&gt;\(\pi_2 = P(X=2) = 1 -
+<span class="math inline">\(\pi_1 := P(X=1)\)</span>: the proportion
+of caught birds that belong to flock 1<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;&lt;span class="math inline"&gt;\(\pi_2 = P(X=2) = 1 -
 P(X=1)\)&lt;/span&gt;&lt;/p&gt;'><sup>2</sup></a>
 </li>
 </ul>
@@ -368,7 +366,7 @@ the time it takes to run the <code>fit_model()</code> function:</p>
 <code class="sourceCode R"><span><span class="op">{</span><span class="va">results</span> <span class="op">=</span> <span class="fu">fit_model</span><span class="op">(</span><span class="va">data</span>, tolerance <span class="op">=</span> <span class="fl">0.00001</span><span class="op">)</span><span class="op">}</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.429   0.021   0.449</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.437   0.031   0.468</span></span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">results</span>, n <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 19 × 4</span></span></span>
