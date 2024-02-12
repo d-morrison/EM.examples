@@ -39,11 +39,11 @@ To complete this model, let's assume that $p(Y=y|X=1)$ is a Gaussian ("bell-curv
 
 We want to estimate five parameters:
 
-* $\mu_1 \eqdef \text{E}[Y|X=1]$: the average weight of birds in flock 1
-* $\sigma_1 \eqdef \text{SD}(Y|X=1)$: the standard deviation of weights  among birds in flock 1
-* $\mu_2 \eqdef \text{E}[Y|X=2]$: the average weight of birds in flock 2
-* $\sigma_2 \eqdef \text{SD}(Y|X=2)$: the standard deviation of weights  among birds in flock 2
-* $\pi_1 \eqdef P(X=1)$: the proportion of caught birds that belong to flock 1^[$\pi_2 = P(X=2) = 1 - P(X=1)$]
+* $\mu_1 := \text{E}[Y|X=1]$: the average weight of birds in flock 1
+* $\sigma_1 := \text{SD}(Y|X=1)$: the standard deviation of weights  among birds in flock 1
+* $\mu_2 := \text{E}[Y|X=2]$: the average weight of birds in flock 2
+* $\sigma_2 := \text{SD}(Y|X=2)$: the standard deviation of weights  among birds in flock 2
+* $\pi_1 := P(X=1)$: the proportion of caught birds that belong to flock 1^[$\pi_2 = P(X=2) = 1 - P(X=1)$]
 
 If we could directly observe the flock membership for each weighed bird, $x_1,...,x_n$, and count the number tbat came from each flock, $n_1$ and $n_2$. Then this would be an easy problem:
 
