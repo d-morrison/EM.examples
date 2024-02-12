@@ -19,9 +19,48 @@ knitr::opts_chunk$set(
 
 ```
 
-This R code defines an Expectation-Maximization (EM) algorithm to estimate the parameters of a mixture of two Gaussian distributions. The EM algorithm is an iterative method for finding the maximum likelihood estimates of parameters in models with latent (unobserved) variables. The Gaussian mixture model in this code assumes that the observed data, Y, is generated from either one of two Gaussian distributions with means mu[1] and mu[2] and a common standard deviation sigma. The probability of the data coming from the first Gaussian distribution is pi, while the probability of the data coming from the second Gaussian distribution is 1 - pi.
+The following code implements an Expectation-Maximization (EM) algorithm to find the maximum likelihood estimate of the parameters of a two-component Gaussian mixture model. 
 
-The gen_data function generates data according to this Gaussian mixture model, while the fit_model function performs the EM algorithm. The E_step function calculates the expected value of the log-likelihood given the current estimates of the parameters and the observed data, while the M_step updates the estimates of the parameters based on the expected log-likelihood. The algorithm continues to iterate until the difference in the log-likelihood between consecutive iterations is less than a specified tolerance (tolerance). The results of the algorithm are saved in a progress tibble that shows the values of the estimated parameter pi-hat and the log-likelihood for each iteration.
+## Problem summary
+
+In statistics, a [finite mixture model](https://en.wikipedia.org/wiki/Mixture_model) is a probabilistic model in which each observation comes from one of several latent subpopulations, but the subpopulation labels are not observable.
+
+For example, suppose that you are tying to model the weights of the birds in your local park. The birds belong to two flocks, and those flocks have different feeding grounds, so they have different distributions of weights. However, you don't know which birds belong to which flock when you catch them for weighing. You would like to estimate the mean weight and standard deviation for each flock, as well as the proportion of caught birds that come from each flock.
+
+Supposed you catch and weigh $n = 100$ birds, and the recorded weights are $y_1,...y_n$. Let $X_i$ represent the flock that bird $i$ belongs to, with $X=1$ representing one flock and $X=2$ representing the other flock.
+
+A mixture model for this data has the structure:
+
+$$p(Y=y) = \sum_{x\in\{1,2\}} p(Y=y|X=x)P(X=x)$$
+
+^[let lowercase $p()$ denote probability densities and uppercase $P()$ denote probability masses]
+
+To complete this model, let's assume that $p(Y=y|X=1)$ is a Gaussian ("bell-curve") distribution with parameters $\mu_1$ and $\sigma_1$, and similarly for p(Y=y|X=2)$.
+
+We want to estimate five parameters:
+
+* $\mu_1 \eqdef \text{E}[Y|X=1]$: the average weight of birds in flock 1
+* $\sigma_1 \eqdef \text{SD}(Y|X=1)$: the standard deviation of weights  among birds in flock 1
+* $\mu_2 \eqdef \text{E}[Y|X=2]$: the average weight of birds in flock 2
+* $\sigma_2 \eqdef \text{SD}(Y|X=2)$: the standard deviation of weights  among birds in flock 2
+* $\pi_1 \eqdef P(X=1)$: the proportion of caught birds that belong to flock 1^[$\pi_2 = P(X=2) = 1 - P(X=1)$]
+
+If we could directly observe the flock membership for each weighed bird, $x_1,...,x_n$, and count the number tbat came from each flock, $n_1$ and $n_2$. Then this would be an easy problem:
+
+* $\hat{\mu}_1 = \sum_{\{i: x_i = 1\}} Y_i$
+* $\hat{\sigma}_1 = \sqrt{\frac{1}{n_1} \sum_{\{i: x_i = 1\}}(Y_i - \hat{\mu}_1)^2}$
+* $\hat{\pi_1} = n_1/n$
+* [similarly for $\mu_2$ and $\sigma_2$]
+
+But what if we can't observe $x$? Can we still estimate $\mu_1$, $\mu_2$, $\sigma_1$, $\sigma_2$, and $\pi$?
+
+If we try to directly maximize the likelihood of the observed data, $\mathcal{L} = \prod_{i\in 1:n} {p(Y=y_i)}$, by taking the derivative of the log-likelihood $\ell = \log{\mathcal{L}}$, setting \ell' equal to zero, and solving for the parameters, we quickly run into difficulties in taking the derivative of $\ell$, because $p(Y=y_i)$ is a sum (try it!).
+
+## EM algorithm to the rescue
+
+The EM algorithm is an iterative method for finding the maximum likelihood estimates of parameters in models with latent (unobserved) variables. The Gaussian mixture model in this code assumes that the observed data, $Y$, is generated from either one of two Gaussian distributions with means $\mu_1$ and $mu_2$ and a common standard deviation $\sigma$. The probability of the data coming from the first Gaussian distribution is $\pi$, while the probability of the data coming from the second Gaussian distribution is $1 - \pi$.
+
+The `gen_data()` function generates data according to this Gaussian mixture model, while the `fit_model()` function performs the EM algorithm. The E_step function calculates the expected value of the log-likelihood given the current estimates of the parameters and the observed data, while the M_step updates the estimates of the parameters based on the expected log-likelihood. The algorithm continues to iterate until the difference in the log-likelihood between consecutive iterations is less than a specified tolerance (tolerance). The results of the algorithm are saved in a progress tibble that shows the values of the estimated parameter pi-hat and the log-likelihood for each iteration.
 
 ```{r setup}
 
@@ -170,5 +209,28 @@ Finally, the `system.time()` function is used to measure the time it takes to ru
 
 ```{r}
 print(results, n = Inf)
+```
+
+Here's what happened:
+
+```{r}
+library(ggplot2)
+results |> 
+  ggplot(aes(
+    x = `p(Z=1)`,
+    y = loglik,
+    col = Iteration
+  )) + 
+  geom_point() +
+  geom_path(
+    arrow = arrow(
+    angle = 20,
+      type = "open"
+  )) +
+  theme_bw() +
+  ylab("log-likelihood") +
+  theme(
+    legend.position = "bottom"
+  )
 ```
 
